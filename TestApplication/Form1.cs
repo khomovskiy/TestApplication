@@ -16,12 +16,14 @@ namespace TestApplication
         //Сортировка по времени последнего обновления по возрастанию
         private void OrderByLastTimeButton_CheckedChanged(object sender, EventArgs e)
         {
+            if (dataView.ListDataModels is null) return;
             dataView.ListDataModels = dataView.ListDataModels.OrderBy(i => i.LastUpdateDateTime).ToList();
             dgBoards.DataSource = dataView.ListDataModels;
         }
         //Сортировка по времени последнего обновления по убыванию
         private void OrderByLastDescTimeButton_CheckedChanged(object sender, EventArgs e)
         {
+            if (dataView.ListDataModels is null) return;
             dataView.ListDataModels = dataView.ListDataModels.OrderByDescending(i => i.LastUpdateDateTime).ToList();
             dgBoards.DataSource = dataView.ListDataModels;
         }
@@ -36,6 +38,7 @@ namespace TestApplication
                 }
             }
             dataView.GetLatestUpdateTimes();
+            if (dataView.ListDataModels is null) return;
             dataView.ListDataModels = dataView.ListDataModels.OrderByDescending(i => i.LastUpdateDateTime).ToList();
             orderByDescLastTimeButton.Checked = true;
             dgBoards.DataSource = dataView.ListDataModels;
@@ -55,6 +58,7 @@ namespace TestApplication
             if (double.TryParse(hoursComboBox.Text, out hours) && double.TryParse(minutesComboBox.Text, out minutes))
             {
                 dataView.GetBoardNotUpdatedMoreTime(hours, minutes);
+                if (dataView.ListDataModels is null) return;
                 dataView.ListDataModels = dataView.ListDataModels.OrderByDescending(i => i.LastUpdateDateTime).ToList();
                 orderByDescLastTimeButton.Checked = true;
                 dgBoards.DataSource = dataView.ListDataModels;

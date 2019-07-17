@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace TestApplication
 {
     //Надстройка над MySqlConnection
-    class DBMySQLConnector 
+    class DBMySQLConnector
     {
         string ConnectionString { get; set; }
         MySqlConnection Connection { get; set; }
@@ -20,6 +20,7 @@ namespace TestApplication
             catch (ConfigurationErrorsException e)
             {
                 MessageBox.Show(e.Message, "ConfigurationError", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
             Connection = new MySqlConnection(ConnectionString);
 
@@ -27,9 +28,16 @@ namespace TestApplication
         //Закрывает соединение с БД
         public void CloseConnection()
         {
-            if(Connection.State == System.Data.ConnectionState.Open)
+            if (Connection.State == System.Data.ConnectionState.Open)
             {
-                Connection.Close();
+                try
+                {
+                    Connection.Close();
+                }
+                catch (MySqlException e)
+                {
+                    throw new Exception(e.Message, e);
+                }
             }
         }
         //Открывает соединение с БД
@@ -37,7 +45,14 @@ namespace TestApplication
         {
             if (Connection.State != System.Data.ConnectionState.Open)
             {
-                Connection.Open();
+                try
+                {
+                    Connection.Open();
+                }
+                catch (MySqlException e)
+                {
+                    throw new Exception(e.Message, e);
+                }
             }
         }
         //Выполнение запросов без возращаемых данных
@@ -46,12 +61,11 @@ namespace TestApplication
             MySqlCommand sqlCommand = new MySqlCommand(command, Connection);
             try
             {
-                OpenConnection();
                 int rows = sqlCommand.ExecuteNonQuery();
                 CloseConnection();
                 return rows;
             }
-            catch (SqlException e)
+            catch (MySqlException e)
             {
                 MessageBox.Show(e.Message, "SqlError", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

@@ -27,19 +27,18 @@ namespace TestApplication
         {
             string checkQuery = "SHOW index FROM `coordinates` WHERE `Key_name`='coord_index' AND (`Column_name`='imei_id' OR `Column_name`='dt')";
             MySqlDataReader reader = connector.ExecuteReader(checkQuery);
-            if (reader.HasRows)
+            if (reader!=null&&reader.HasRows)
             {
                 reader.Close();
                 return true;
             }
-            reader.Close();
             return false;
         }
         //Получает список всех бортов с датой последнего обновления координат
         public void GetLatestUpdateTimes()
         {
             List<DataModel> list = ReadImeies();
-            if (list == null)
+            if (list is null)
             {
                 connector.CloseConnection();
                 return;
@@ -68,9 +67,8 @@ namespace TestApplication
         {
             string sqlQuery = "SELECT `id`, `othername`, `gov_number` FROM `imeies`";
             MySqlDataReader readerBoards = connector.ExecuteReader(sqlQuery);
-            if (readerBoards == null)
+            if (readerBoards is null)
             {
-                readerBoards.Close();
                 connector.CloseConnection();
                 return null;
             }
@@ -99,6 +97,7 @@ namespace TestApplication
         public void GetBoardNotUpdatedMoreTime(double hours, double minutes)
         {
             this.GetLatestUpdateTimes();
+            if (ListDataModels is null) return;
             for (int i = 0; i < ListDataModels.Count; i++)
             {
                 double span = (DateTime.Now - ListDataModels[i].LastUpdateDateTime).TotalMinutes;
