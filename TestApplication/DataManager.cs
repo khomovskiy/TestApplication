@@ -10,29 +10,11 @@ namespace TestApplication
     class DataManager
     {
         public DBMySQLConnector connector { get; set; }
-        string createIndexQuery;
-        //Список полученных и вывоимых данных
+        //Список полученных и выводимых данных
         public List<DataModel> ListDataModels { get; set; }
         public DataManager()
         {
             connector = new DBMySQLConnector();
-            //Проверка наличия и создание индекса таблицы `coordinates` в БД
-            if (!HasIndex())
-            {
-                createIndexQuery = "CREATE INDEX `coord_index` ON `coordinates`(`imei_id`, `dt`)";
-                connector.ExecuteNonQuery(createIndexQuery);
-            }
-        }
-        bool HasIndex()
-        {
-            string checkQuery = "SHOW index FROM `coordinates` WHERE `Key_name`='coord_index' AND (`Column_name`='imei_id' OR `Column_name`='dt')";
-            MySqlDataReader reader = connector.ExecuteReader(checkQuery);
-            if (reader!=null&&reader.HasRows)
-            {
-                reader.Close();
-                return true;
-            }
-            return false;
         }
         //Получает список всех бортов с датой последнего обновления координат
         public void GetLatestUpdateTimes()
