@@ -31,6 +31,12 @@
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.dgBoards = new System.Windows.Forms.DataGridView();
+            this.boardNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.governmentNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lastUpdateDateTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StartDateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EndDateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.showAllBoardsButton = new System.Windows.Forms.Button();
             this.NotUpdatedMoreTimeButton = new System.Windows.Forms.Button();
@@ -40,16 +46,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.BigDelayButton = new System.Windows.Forms.Button();
             this.addRowsButton = new System.Windows.Forms.Button();
-            this.StartDateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.EndDateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.boardNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.governmentNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lastUpdateDateTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgBoards)).BeginInit();
-            this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataModelBindingSource)).BeginInit();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -89,6 +89,54 @@
             this.dgBoards.RowHeadersVisible = false;
             this.dgBoards.Size = new System.Drawing.Size(829, 409);
             this.dgBoards.TabIndex = 0;
+            // 
+            // boardNameDataGridViewTextBoxColumn
+            // 
+            this.boardNameDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.boardNameDataGridViewTextBoxColumn.DataPropertyName = "BoardName";
+            this.boardNameDataGridViewTextBoxColumn.HeaderText = "Номер борта";
+            this.boardNameDataGridViewTextBoxColumn.Name = "boardNameDataGridViewTextBoxColumn";
+            this.boardNameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // governmentNumberDataGridViewTextBoxColumn
+            // 
+            this.governmentNumberDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.governmentNumberDataGridViewTextBoxColumn.DataPropertyName = "GovernmentNumber";
+            this.governmentNumberDataGridViewTextBoxColumn.HeaderText = "Гос. номер";
+            this.governmentNumberDataGridViewTextBoxColumn.Name = "governmentNumberDataGridViewTextBoxColumn";
+            this.governmentNumberDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // lastUpdateDateTimeDataGridViewTextBoxColumn
+            // 
+            this.lastUpdateDateTimeDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.lastUpdateDateTimeDataGridViewTextBoxColumn.DataPropertyName = "LastUpdateDateTime";
+            this.lastUpdateDateTimeDataGridViewTextBoxColumn.HeaderText = "Время последнего обновления";
+            this.lastUpdateDateTimeDataGridViewTextBoxColumn.Name = "lastUpdateDateTimeDataGridViewTextBoxColumn";
+            this.lastUpdateDateTimeDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // StartDateTime
+            // 
+            this.StartDateTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.StartDateTime.DataPropertyName = "StartDateTime";
+            this.StartDateTime.FillWeight = 150F;
+            this.StartDateTime.HeaderText = "Cледующее обновление";
+            this.StartDateTime.Name = "StartDateTime";
+            this.StartDateTime.ReadOnly = true;
+            this.StartDateTime.Visible = false;
+            // 
+            // EndDateTime
+            // 
+            this.EndDateTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.EndDateTime.DataPropertyName = "EndDateTime";
+            this.EndDateTime.FillWeight = 150F;
+            this.EndDateTime.HeaderText = "Предыдущее обновление";
+            this.EndDateTime.Name = "EndDateTime";
+            this.EndDateTime.ReadOnly = true;
+            this.EndDateTime.Visible = false;
+            // 
+            // dataModelBindingSource
+            // 
+            this.dataModelBindingSource.DataSource = typeof(TestApplication.DataModel);
             // 
             // flowLayoutPanel1
             // 
@@ -273,54 +321,6 @@
             this.addRowsButton.Visible = false;
             this.addRowsButton.Click += new System.EventHandler(this.AddRowsButton_Click);
             // 
-            // StartDateTime
-            // 
-            this.StartDateTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.StartDateTime.DataPropertyName = "StartDateTime";
-            this.StartDateTime.FillWeight = 150F;
-            this.StartDateTime.HeaderText = "Cледующее обновление";
-            this.StartDateTime.Name = "StartDateTime";
-            this.StartDateTime.ReadOnly = true;
-            this.StartDateTime.Visible = false;
-            // 
-            // EndDateTime
-            // 
-            this.EndDateTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.EndDateTime.DataPropertyName = "EndDateTime";
-            this.EndDateTime.FillWeight = 150F;
-            this.EndDateTime.HeaderText = "Предыдущее обновление";
-            this.EndDateTime.Name = "EndDateTime";
-            this.EndDateTime.ReadOnly = true;
-            this.EndDateTime.Visible = false;
-            // 
-            // boardNameDataGridViewTextBoxColumn
-            // 
-            this.boardNameDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.boardNameDataGridViewTextBoxColumn.DataPropertyName = "BoardName";
-            this.boardNameDataGridViewTextBoxColumn.HeaderText = "Номер борта";
-            this.boardNameDataGridViewTextBoxColumn.Name = "boardNameDataGridViewTextBoxColumn";
-            this.boardNameDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // governmentNumberDataGridViewTextBoxColumn
-            // 
-            this.governmentNumberDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.governmentNumberDataGridViewTextBoxColumn.DataPropertyName = "GovernmentNumber";
-            this.governmentNumberDataGridViewTextBoxColumn.HeaderText = "Гос. номер";
-            this.governmentNumberDataGridViewTextBoxColumn.Name = "governmentNumberDataGridViewTextBoxColumn";
-            this.governmentNumberDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // lastUpdateDateTimeDataGridViewTextBoxColumn
-            // 
-            this.lastUpdateDateTimeDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.lastUpdateDateTimeDataGridViewTextBoxColumn.DataPropertyName = "LastUpdateDateTime";
-            this.lastUpdateDateTimeDataGridViewTextBoxColumn.HeaderText = "Время последнего обновления";
-            this.lastUpdateDateTimeDataGridViewTextBoxColumn.Name = "lastUpdateDateTimeDataGridViewTextBoxColumn";
-            this.lastUpdateDateTimeDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // dataModelBindingSource
-            // 
-            this.dataModelBindingSource.DataSource = typeof(TestApplication.DataModel);
-            // 
             // TrackUpdateInfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -331,9 +331,9 @@
             this.Text = "Track Update Info";
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgBoards)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataModelBindingSource)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataModelBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }

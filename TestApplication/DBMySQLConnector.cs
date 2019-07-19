@@ -23,7 +23,7 @@ namespace TestApplication
         {
             try
             {
-                var factory = DbProviderFactories.GetFactory(ConfigurationManager.ConnectionStrings["defaultConnection"].ProviderName);
+                var factory = DbProviderFactories.GetFactory("MySql.Data.MySqlClient");
                 var builder = factory.CreateConnectionStringBuilder();
                 builder.ConnectionString = ConfigurationManager.ConnectionStrings["defaultConnection"].ConnectionString;
                 Server = server is null ? builder["Server"] as string : server;
@@ -43,7 +43,7 @@ namespace TestApplication
                 DbConnectionStringBuilder.AppendKeyValuePair(str, "Password", Password);
                 ConnectionString = str.ToString();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageBox.Show("Ошибка конфигурации подключения", "ConfigurationError", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
