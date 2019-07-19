@@ -14,6 +14,7 @@ namespace TestApplication
         {
             InitializeComponent();
             dataView = new DataManager();
+            if (dataView is null) Environment.Exit(0);
         }
         //Вывести все борта с последним временем обновления координат
         private void ShowAllBoardsButton_Click(object sender, EventArgs e)

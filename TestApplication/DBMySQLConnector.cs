@@ -1,7 +1,9 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Configuration;
+using System.Data.Common;
 using System.Data.SqlClient;
+using System.Text;
 using System.Windows.Forms;
 
 namespace TestApplication
@@ -10,16 +12,40 @@ namespace TestApplication
     class DBMySQLConnector
     {
         string ConnectionString { get; set; }
-        MySqlConnection Connection { get; set; }
-        public DBMySQLConnector()
+        public MySqlConnection Connection { get; set; }
+        public string Server { get; set; }
+        public string DataBase { get; set; }
+        public string User { get; set; }
+        public string Password { get; set; }
+        public int Port { get; set; }
+
+        public DBMySQLConnector(string server = null, string dataBase = null, string user = null, string password = null, int port = 3306)
         {
             try
             {
-                ConnectionString = ConfigurationManager.ConnectionStrings["defaultConnection"].ConnectionString;
+                var factory = DbProviderFactories.GetFactory(ConfigurationManager.ConnectionStrings["defaultConnection"].ProviderName);
+                var builder = factory.CreateConnectionStringBuilder();
+                builder.ConnectionString = ConfigurationManager.ConnectionStrings["defaultConnection"].ConnectionString;
+                Server = server is null ? builder["Server"] as string : server;
+                DataBase = dataBase is null ? builder["Database"] as string : dataBase;
+                int csPort;
+                if (int.TryParse(builder["Port"] as string, out csPort))
+                    Port = csPort;
+                else
+                    Port = port;
+                User = user is null ? builder["Uid"] as string : user;
+                Password = password is null ? builder["Password"] as string : password;
+                StringBuilder str = new StringBuilder();
+                DbConnectionStringBuilder.AppendKeyValuePair(str, "Server", Server);
+                DbConnectionStringBuilder.AppendKeyValuePair(str, "Port", Port.ToString());
+                DbConnectionStringBuilder.AppendKeyValuePair(str, "Database", DataBase);
+                DbConnectionStringBuilder.AppendKeyValuePair(str, "Uid", User);
+                DbConnectionStringBuilder.AppendKeyValuePair(str, "Password", Password);
+                ConnectionString = str.ToString();
             }
-            catch (ConfigurationErrorsException e)
+            catch (Exception e)
             {
-                MessageBox.Show(e.Message, "ConfigurationError", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка конфигурации подключения", "ConfigurationError", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             Connection = new MySqlConnection(ConnectionString);

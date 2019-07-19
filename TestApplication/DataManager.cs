@@ -20,6 +20,7 @@ namespace TestApplication
         public DataManager()
         {
             connector = new DBMySQLConnector();
+            if (connector.Connection is null) Environment.Exit(0);
         }
         //Получает дату последнего обновления координат каждого борта
         public void GetLatestUpdateTimes()
@@ -66,11 +67,10 @@ namespace TestApplication
                 {
                     list.Add(new DataModel
                     {
-                        Id = readerBoards.GetInt32(0),
-                        BoardName = readerBoards.GetString(1),
-                        GovernmentNumber = readerBoards.GetString(2),
+                        Id = readerBoards.IsDBNull(0) ? -1 : readerBoards.GetInt32(0),
+                        BoardName = readerBoards.IsDBNull(1) ? "" : readerBoards.GetString(1),
+                        GovernmentNumber = readerBoards.IsDBNull(2) ? "" : readerBoards.GetString(2),
                     });
-
                 }
                 readerBoards.Close();
             }
