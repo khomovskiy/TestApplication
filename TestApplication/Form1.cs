@@ -32,6 +32,8 @@ namespace TestApplication
         private void ShowAllBoardsButton_Click(object sender, EventArgs e)
         {
             addRowsButton.Visible = false;
+            groupBox1.Enabled = true;
+
             foreach (DataGridViewTextBoxColumn column in dgBoards.Columns)
             {
                 if (column.Name == "StartDateTime" || column.Name == "EndDateTime")
@@ -53,6 +55,8 @@ namespace TestApplication
         private void NotUpdatedMoreTimeButton_Click(object sender, EventArgs e)
         {
             addRowsButton.Visible = false;
+            groupBox1.Enabled = true;
+
             foreach (DataGridViewTextBoxColumn column in dgBoards.Columns)
             {
                 if (column.Name == "StartDateTime" || column.Name == "EndDateTime")
@@ -82,6 +86,7 @@ namespace TestApplication
 
         private async void BigDelayButton_Click(object sender, EventArgs e)
         {
+            groupBox1.Enabled = false;
             addRowsButton.Visible = true;
             SetPeriodDialog dialog = new SetPeriodDialog();
             if (dialog.ShowDialog() == DialogResult.OK)

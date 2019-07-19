@@ -101,9 +101,10 @@ namespace TestApplication
         {
             int id = 0;
             MySqlParameter idParam = new MySqlParameter("@id", id);
-            if (begin==new DateTime())
+            if (begin == new DateTime())
             {
-                idParam.Value = ListDataModels[ListDataModels.Count - 1].CoordId;
+                if (ListDataModels.Count > 0)
+                    idParam.Value = ListDataModels[ListDataModels.Count - 1].CoordId;
             }
             else
             {
@@ -142,11 +143,12 @@ namespace TestApplication
                 }
             }
         }
-        int GetFirstRowId(MySqlParameter[] parameters) {
+        int GetFirstRowId(MySqlParameter[] parameters)
+        {
             string firstIdQuery = "SELECT `id` FROM `coordinates` WHERE `dt` BETWEEN @startDate AND @endDate ORDER BY `id` DESC, `dt` DESC LIMIT 1";
             MySqlDataReader reader = connector.ExecuteReader(firstIdQuery, parameters);
             int firstRowId = 0;
-            if (reader.HasRows && reader.Read())
+            if (reader != null && reader.HasRows && reader.Read())
             {
                 firstRowId = reader.GetInt32(0);
             }
@@ -155,7 +157,7 @@ namespace TestApplication
                 MessageBox.Show("Ошибка чтения данных", "ReadError", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 firstRowId = -1;
             }
-            reader.Close();
+            if (reader != null) reader.Close();
             return firstRowId;
         }
         List<DataModel> GetRows(MySqlParameter[] parameters)
@@ -163,7 +165,7 @@ namespace TestApplication
             string firstDateQuery = "SELECT `id`, `dt`, `imei_id` FROM `coordinates` WHERE `id`<@id AND (`dt` BETWEEN @startDate AND @endDate) ORDER BY `id` DESC, `dt` DESC LIMIT 10000";
             MySqlDataReader reader = connector.ExecuteReader(firstDateQuery, parameters);
             List<DataModel> buff = new List<DataModel>();
-            while (reader!=null&&reader.Read())
+            while (reader != null && reader.Read())
             {
                 if (reader.HasRows && !reader.IsDBNull(1))
                 {
