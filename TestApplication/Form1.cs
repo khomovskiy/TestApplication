@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using System;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,26 +15,16 @@ namespace TestApplication
             InitializeComponent();
             dataView = new DataManager();
         }
-        //Сортировка по времени последнего обновления по возрастанию
-        private void OrderByLastTimeButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (dataView.ListDataModels is null) return;
-            dataView.ListDataModels = dataView.ListDataModels.OrderBy(i => i.LastUpdateDateTime).ToList();
-            dgBoards.DataSource = dataView.ListDataModels;
-        }
-        //Сортировка по времени последнего обновления по убыванию
-        private void OrderByLastDescTimeButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (dataView.ListDataModels is null) return;
-            dataView.ListDataModels = dataView.ListDataModels.OrderByDescending(i => i.LastUpdateDateTime).ToList();
-            dgBoards.DataSource = dataView.ListDataModels;
-        }
         //Вывести все борта с последним временем обновления координат
         private void ShowAllBoardsButton_Click(object sender, EventArgs e)
         {
+            
+            dataView.GetLatestUpdateTimes();
+            if (dataView.ListDataModels is null || dataView.ListDataModels.Count == 0)
+            {
+                return;
+            }
             addRowsButton.Visible = false;
-            groupBox1.Enabled = true;
-
             foreach (DataGridViewTextBoxColumn column in dgBoards.Columns)
             {
                 if (column.Name == "StartDateTime" || column.Name == "EndDateTime")
@@ -45,38 +36,33 @@ namespace TestApplication
                     column.Visible = true;
                 }
             }
-            dataView.GetLatestUpdateTimes();
-            if (dataView.ListDataModels is null) return;
-            dataView.ListDataModels = dataView.ListDataModels.OrderByDescending(i => i.LastUpdateDateTime).ToList();
-            orderByDescLastTimeButton.Checked = true;
-            dgBoards.DataSource = dataView.ListDataModels;
+            dgBoards.DataSource = new SortableBindingList<DataModel> (dataView.ListDataModels);
         }
         //Вывести все борта, которые не обновлялись более `hours`:`minutes` 
         private void NotUpdatedMoreTimeButton_Click(object sender, EventArgs e)
         {
-            addRowsButton.Visible = false;
-            groupBox1.Enabled = true;
-
-            foreach (DataGridViewTextBoxColumn column in dgBoards.Columns)
-            {
-                if (column.Name == "StartDateTime" || column.Name == "EndDateTime")
-                {
-                    column.Visible = false;
-                }
-                else if (column.Name == "lastUpdateDateTimeDataGridViewTextBoxColumn")
-                {
-                    column.Visible = true;
-                }
-            }
             double hours;
             double minutes;
             if (double.TryParse(hoursComboBox.Text, out hours) && double.TryParse(minutesComboBox.Text, out minutes))
             {
                 dataView.GetBoardNotUpdatedMoreTime(hours, minutes);
-                if (dataView.ListDataModels is null) return;
-                dataView.ListDataModels = dataView.ListDataModels.OrderByDescending(i => i.LastUpdateDateTime).ToList();
-                orderByDescLastTimeButton.Checked = true;
-                dgBoards.DataSource = dataView.ListDataModels;
+                if (dataView.ListDataModels is null || dataView.ListDataModels.Count == 0)
+                {
+                    return;
+                }
+                addRowsButton.Visible = false;
+                foreach (DataGridViewTextBoxColumn column in dgBoards.Columns)
+                {
+                    if (column.Name == "StartDateTime" || column.Name == "EndDateTime")
+                    {
+                        column.Visible = false;
+                    }
+                    else if (column.Name == "lastUpdateDateTimeDataGridViewTextBoxColumn")
+                    {
+                        column.Visible = true;
+                    }
+                }
+                dgBoards.DataSource = new SortableBindingList<DataModel>(dataView.ListDataModels);
             }
             else
             {
@@ -86,8 +72,6 @@ namespace TestApplication
 
         private async void BigDelayButton_Click(object sender, EventArgs e)
         {
-            groupBox1.Enabled = false;
-            addRowsButton.Visible = true;
             SetPeriodDialog dialog = new SetPeriodDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
@@ -99,6 +83,14 @@ namespace TestApplication
                 });
                 wait.Close();
             }
+            else
+            {
+                return;
+            }
+            if(dataView.ListDataModels is null || dataView.ListDataModels.Count == 0)
+            {
+                return;
+            }
             foreach (DataGridViewTextBoxColumn column in dgBoards.Columns)
             {
                 if (column.Name == "StartDateTime" || column.Name == "EndDateTime")
@@ -110,7 +102,8 @@ namespace TestApplication
                     column.Visible = false;
                 }
             }
-            dgBoards.DataSource = dataView.ListDataModels;
+            addRowsButton.Visible = true;
+            dgBoards.DataSource = new SortableBindingList<DataModel>(dataView.ListDataModels);
 
         }
 
@@ -123,9 +116,7 @@ namespace TestApplication
                 dataView.GetBigUpdateDelayInTimeRange(new DateTime(), new DateTime(), new TimeSpan());
             });
             wait.Close();
-            dgBoards.DataSource = null;
-            dgBoards.DataSource = dataView.ListDataModels;
-            dgBoards.Refresh();
+            dgBoards.DataSource = new SortableBindingList<DataModel>(dataView.ListDataModels);
         }
     }
 }

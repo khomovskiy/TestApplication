@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
@@ -154,7 +155,7 @@ namespace TestApplication
             }
             else
             {
-                MessageBox.Show("Ошибка чтения данных", "ReadError", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Данные не найдены", "ReadError", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 firstRowId = -1;
             }
             if (reader != null) reader.Close();

@@ -136,6 +136,7 @@
             this.hoursComboBox.Name = "hoursComboBox";
             this.hoursComboBox.Size = new System.Drawing.Size(48, 21);
             this.hoursComboBox.TabIndex = 8;
+            this.hoursComboBox.Text = "0";
             // 
             // label5
             // 
@@ -221,6 +222,7 @@
             this.minutesComboBox.Name = "minutesComboBox";
             this.minutesComboBox.Size = new System.Drawing.Size(54, 21);
             this.minutesComboBox.TabIndex = 9;
+            this.minutesComboBox.Text = "0";
             // 
             // label6
             // 
