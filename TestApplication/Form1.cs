@@ -9,19 +9,19 @@ namespace TestApplication
 {
     public partial class TrackUpdateInfoForm : Form
     {
-        DataManager dataView;
+        DataManager DataView { get; set; }
         public TrackUpdateInfoForm()
         {
             InitializeComponent();
-            dataView = new DataManager();
-            if (dataView is null) Environment.Exit(0);
+            DataView = new DataManager();
+            if (DataView is null) Environment.Exit(0);
         }
         //Вывести все борта с последним временем обновления координат
         private void ShowAllBoardsButton_Click(object sender, EventArgs e)
         {
             
-            dataView.GetLatestUpdateTimes();
-            if (dataView.ListDataModels is null || dataView.ListDataModels.Count == 0)
+            DataView.GetLatestUpdateTimes();
+            if (DataView.ListDataModels is null || DataView.ListDataModels.Count == 0)
             {
                 return;
             }
@@ -37,17 +37,15 @@ namespace TestApplication
                     column.Visible = true;
                 }
             }
-            dgBoards.DataSource = new SortableBindingList<DataModel> (dataView.ListDataModels);
+            dgBoards.DataSource = new SortableBindingList<DataModel> (DataView.ListDataModels);
         }
         //Вывести все борта, которые не обновлялись более `hours`:`minutes` 
         private void NotUpdatedMoreTimeButton_Click(object sender, EventArgs e)
         {
-            double hours;
-            double minutes;
-            if (double.TryParse(hoursComboBox.Text, out hours) && double.TryParse(minutesComboBox.Text, out minutes))
+            if (double.TryParse(hoursComboBox.Text, out double hours) && double.TryParse(minutesComboBox.Text, out double minutes))
             {
-                dataView.GetBoardNotUpdatedMoreTime(hours, minutes);
-                if (dataView.ListDataModels is null || dataView.ListDataModels.Count == 0)
+                DataView.GetBoardNotUpdatedMoreTime(hours, minutes);
+                if (DataView.ListDataModels is null || DataView.ListDataModels.Count == 0)
                 {
                     return;
                 }
@@ -63,7 +61,7 @@ namespace TestApplication
                         column.Visible = true;
                     }
                 }
-                dgBoards.DataSource = new SortableBindingList<DataModel>(dataView.ListDataModels);
+                dgBoards.DataSource = new SortableBindingList<DataModel>(DataView.ListDataModels);
             }
             else
             {
@@ -80,7 +78,7 @@ namespace TestApplication
                 wait.Show();
                 await Task.Run(() =>
                 {
-                    dataView.GetBigUpdateDelayInTimeRange(dialog.From, dialog.To, dialog.During);
+                    DataView.GetBigUpdateDelayInTimeRange(dialog.From, dialog.To, dialog.During);
                 });
                 wait.Close();
             }
@@ -88,7 +86,7 @@ namespace TestApplication
             {
                 return;
             }
-            if(dataView.ListDataModels is null || dataView.ListDataModels.Count == 0)
+            if(DataView.ListDataModels is null || DataView.ListDataModels.Count == 0)
             {
                 return;
             }
@@ -104,7 +102,7 @@ namespace TestApplication
                 }
             }
             addRowsButton.Visible = true;
-            dgBoards.DataSource = new SortableBindingList<DataModel>(dataView.ListDataModels);
+            dgBoards.DataSource = new SortableBindingList<DataModel>(DataView.ListDataModels);
 
         }
 
@@ -114,10 +112,10 @@ namespace TestApplication
             wait.Show();
             await Task.Run(() =>
             {
-                dataView.GetBigUpdateDelayInTimeRange(new DateTime(), new DateTime(), new TimeSpan());
+                DataView.GetBigUpdateDelayInTimeRange(new DateTime(), new DateTime(), new TimeSpan());
             });
             wait.Close();
-            dgBoards.DataSource = new SortableBindingList<DataModel>(dataView.ListDataModels);
+            dgBoards.DataSource = new SortableBindingList<DataModel>(DataView.ListDataModels);
         }
     }
 }

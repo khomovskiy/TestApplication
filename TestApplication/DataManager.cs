@@ -10,7 +10,7 @@ namespace TestApplication
     //Класс для управления данными
     class DataManager
     {
-        public DBMySQLConnector connector { get; set; }
+        public DBMySQLConnector Connector { get; set; }
         //Список полученных и выводимых данных
         public List<DataModel> ListDataModels { get; set; }
         DateTime Begin { get; set; }
@@ -19,8 +19,8 @@ namespace TestApplication
         List<DataModel> ListImeies { get; set; }
         public DataManager()
         {
-            connector = new DBMySQLConnector();
-            if (connector.Connection is null) Environment.Exit(0);
+            Connector = new DBMySQLConnector();
+            if (Connector.Connection is null) Environment.Exit(0);
         }
         //Получает дату последнего обновления координат каждого борта
         public void GetLatestUpdateTimes()
@@ -28,7 +28,7 @@ namespace TestApplication
             ListDataModels = ReadImeies();
             if (ListDataModels is null)
             {
-                connector.CloseConnection();
+                Connector.CloseConnection();
                 return;
             }
             MySqlParameter boardIdParam = new MySqlParameter("@imeies_id", 1);
@@ -38,7 +38,7 @@ namespace TestApplication
             foreach (var board in ListDataModels)
             {
                 boardIdParam.Value = board.Id;
-                readerUpdateDateTime = connector.ExecuteReader(sqlSubQuery, parameters);
+                readerUpdateDateTime = Connector.ExecuteReader(sqlSubQuery, parameters);
                 if (readerUpdateDateTime != null && readerUpdateDateTime.Read() && !readerUpdateDateTime.IsDBNull(0))
                 {
                     board.LastUpdateDateTime = readerUpdateDateTime.GetDateTime(0);
@@ -48,16 +48,16 @@ namespace TestApplication
                     readerUpdateDateTime.Close();
                 }
             }
-            connector.CloseConnection();
+            Connector.CloseConnection();
         }
         //Получает список всех бортов
         List<DataModel> ReadImeies()
         {
             string sqlQuery = "SELECT `id`, `othername`, `gov_number` FROM `imeies`";
-            MySqlDataReader readerBoards = connector.ExecuteReader(sqlQuery);
+            MySqlDataReader readerBoards = Connector.ExecuteReader(sqlQuery);
             if (readerBoards is null)
             {
-                connector.CloseConnection();
+                Connector.CloseConnection();
                 return null;
             }
             List<DataModel> list = new List<DataModel>();
@@ -95,7 +95,7 @@ namespace TestApplication
                     i--;
                 }
             }
-            connector.CloseConnection();
+            Connector.CloseConnection();
         }
 
         public void GetBigUpdateDelayInTimeRange(DateTime begin, DateTime end, TimeSpan delaySize)
@@ -147,8 +147,8 @@ namespace TestApplication
         int GetFirstRowId(MySqlParameter[] parameters)
         {
             string firstIdQuery = "SELECT `id` FROM `coordinates` WHERE `dt` BETWEEN @startDate AND @endDate ORDER BY `id` DESC, `dt` DESC LIMIT 1";
-            MySqlDataReader reader = connector.ExecuteReader(firstIdQuery, parameters);
-            int firstRowId = 0;
+            MySqlDataReader reader = Connector.ExecuteReader(firstIdQuery, parameters);
+            int firstRowId;
             if (reader != null && reader.HasRows && reader.Read())
             {
                 firstRowId = reader.GetInt32(0);
@@ -164,16 +164,18 @@ namespace TestApplication
         List<DataModel> GetRows(MySqlParameter[] parameters)
         {
             string firstDateQuery = "SELECT `id`, `dt`, `imei_id` FROM `coordinates` WHERE `id`<@id AND (`dt` BETWEEN @startDate AND @endDate) ORDER BY `id` DESC, `dt` DESC LIMIT 10000";
-            MySqlDataReader reader = connector.ExecuteReader(firstDateQuery, parameters);
+            MySqlDataReader reader = Connector.ExecuteReader(firstDateQuery, parameters);
             List<DataModel> buff = new List<DataModel>();
             while (reader != null && reader.Read())
             {
                 if (reader.HasRows && !reader.IsDBNull(1))
                 {
-                    DataModel data = new DataModel();
-                    data.StartDateTime = reader.GetDateTime(1);
-                    data.CoordId = reader.GetInt32(0);
-                    data.Id = reader.GetInt32(2);
+                    DataModel data = new DataModel
+                    {
+                        StartDateTime = reader.GetDateTime(1),
+                        CoordId = reader.GetInt32(0),
+                        Id = reader.GetInt32(2)
+                    };
                     buff.Add(data);
                 }
             }

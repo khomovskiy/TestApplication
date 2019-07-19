@@ -23,25 +23,24 @@ namespace TestApplication
         {
             try
             {
-                var factory = DbProviderFactories.GetFactory("MySql.Data.MySqlClient");
-                var builder = factory.CreateConnectionStringBuilder();
-                builder.ConnectionString = ConfigurationManager.ConnectionStrings["defaultConnection"].ConnectionString;
-                Server = server is null ? builder["Server"] as string : server;
-                DataBase = dataBase is null ? builder["Database"] as string : dataBase;
-                int csPort;
-                if (int.TryParse(builder["Port"] as string, out csPort))
-                    Port = csPort;
-                else
-                    Port = port;
-                User = user is null ? builder["Uid"] as string : user;
-                Password = password is null ? builder["Password"] as string : password;
-                StringBuilder str = new StringBuilder();
-                DbConnectionStringBuilder.AppendKeyValuePair(str, "Server", Server);
-                DbConnectionStringBuilder.AppendKeyValuePair(str, "Port", Port.ToString());
-                DbConnectionStringBuilder.AppendKeyValuePair(str, "Database", DataBase);
-                DbConnectionStringBuilder.AppendKeyValuePair(str, "Uid", User);
-                DbConnectionStringBuilder.AppendKeyValuePair(str, "Password", Password);
-                ConnectionString = str.ToString();
+                //var factory = DbProviderFactories.GetFactory("MySql.Data");
+                //var builder = factory.CreateConnectionStringBuilder();
+                ConnectionString = ConfigurationManager.ConnectionStrings["defaultConnection"].ConnectionString;
+                //Server = server is null ? builder["Server"] as string : server;
+                //DataBase = dataBase is null ? builder["Database"] as string : dataBase;
+                //if (int.TryParse(builder["Port"] as string, out int csPort))
+                //    Port = csPort;
+                //else
+                //    Port = port;
+                //User = user is null ? builder["Uid"] as string : user;
+                //Password = password is null ? builder["Password"] as string : password;
+                //StringBuilder str = new StringBuilder();
+                //DbConnectionStringBuilder.AppendKeyValuePair(str, "Server", Server);
+                //DbConnectionStringBuilder.AppendKeyValuePair(str, "Port", Port.ToString());
+                //DbConnectionStringBuilder.AppendKeyValuePair(str, "Database", DataBase);
+                //DbConnectionStringBuilder.AppendKeyValuePair(str, "Uid", User);
+                //DbConnectionStringBuilder.AppendKeyValuePair(str, "Password", Password);
+                //ConnectionString = str.ToString();
             }
             catch (Exception)
             {
@@ -105,8 +104,10 @@ namespace TestApplication
         public MySqlDataReader ExecuteReader(string command, MySqlParameter[] parameterCollection = null)
         {
             MySqlDataReader reader = null;
-            MySqlCommand sqlCommand = new MySqlCommand(command, Connection);
-            sqlCommand.CommandTimeout = 2000;
+            MySqlCommand sqlCommand = new MySqlCommand(command, Connection)
+            {
+                CommandTimeout = 2000
+            };
             if (parameterCollection != null)
             {
                 sqlCommand.Parameters.AddRange(parameterCollection);
