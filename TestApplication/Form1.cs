@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TestApplication
@@ -30,11 +31,16 @@ namespace TestApplication
         //Вывести все борта с последним временем обновления координат
         private void ShowAllBoardsButton_Click(object sender, EventArgs e)
         {
+            addRowsButton.Visible = false;
             foreach (DataGridViewTextBoxColumn column in dgBoards.Columns)
             {
                 if (column.Name == "StartDateTime" || column.Name == "EndDateTime")
                 {
                     column.Visible = false;
+                }
+                else if (column.Name == "lastUpdateDateTimeDataGridViewTextBoxColumn")
+                {
+                    column.Visible = true;
                 }
             }
             dataView.GetLatestUpdateTimes();
@@ -46,11 +52,16 @@ namespace TestApplication
         //Вывести все борта, которые не обновлялись более `hours`:`minutes` 
         private void NotUpdatedMoreTimeButton_Click(object sender, EventArgs e)
         {
+            addRowsButton.Visible = false;
             foreach (DataGridViewTextBoxColumn column in dgBoards.Columns)
             {
                 if (column.Name == "StartDateTime" || column.Name == "EndDateTime")
                 {
                     column.Visible = false;
+                }
+                else if (column.Name == "lastUpdateDateTimeDataGridViewTextBoxColumn")
+                {
+                    column.Visible = true;
                 }
             }
             double hours;
@@ -67,6 +78,49 @@ namespace TestApplication
             {
                 MessageBox.Show("Введены неверные значения часов или минут", "InputError", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private async void BigDelayButton_Click(object sender, EventArgs e)
+        {
+            addRowsButton.Visible = true;
+            SetPeriodDialog dialog = new SetPeriodDialog();
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                PleaseWait wait = new PleaseWait();
+                wait.Show();
+                await Task.Run(() =>
+                {
+                    dataView.GetBigUpdateDelayInTimeRange(dialog.From, dialog.To, dialog.During);
+                });
+                wait.Close();
+            }
+            foreach (DataGridViewTextBoxColumn column in dgBoards.Columns)
+            {
+                if (column.Name == "StartDateTime" || column.Name == "EndDateTime")
+                {
+                    column.Visible = true;
+                }
+                else if (column.Name == "lastUpdateDateTimeDataGridViewTextBoxColumn")
+                {
+                    column.Visible = false;
+                }
+            }
+            dgBoards.DataSource = dataView.ListDataModels;
+
+        }
+
+        private async void AddRowsButton_Click(object sender, EventArgs e)
+        {
+            PleaseWait wait = new PleaseWait();
+            wait.Show();
+            await Task.Run(() =>
+            {
+                dataView.GetBigUpdateDelayInTimeRange(new DateTime(), new DateTime(), new TimeSpan());
+            });
+            wait.Close();
+            dgBoards.DataSource = null;
+            dgBoards.DataSource = dataView.ListDataModels;
+            dgBoards.Refresh();
         }
     }
 }
