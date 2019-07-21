@@ -105,7 +105,7 @@ namespace TestApplication
                 }
                 catch (MySqlException e)
                 {
-                    throw new Exception(e.Message, e);
+                    throw new Exception("Ошибка подключения к базе данных", e);
                 }
             }
         }
@@ -115,6 +115,7 @@ namespace TestApplication
             MySqlCommand sqlCommand = new MySqlCommand(command, Connection);
             try
             {
+                OpenConnection();
                 int rows = sqlCommand.ExecuteNonQuery();
                 CloseConnection();
                 return rows;

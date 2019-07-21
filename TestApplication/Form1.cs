@@ -14,18 +14,23 @@ namespace TestApplication
         {
             InitializeComponent();
             DataView = new DataManager();
-            if (DataView is null) Environment.Exit(0);
         }
         //Вывести все борта с последним временем обновления координат
         private void ShowAllBoardsButton_Click(object sender, EventArgs e)
         {
 
             DataView.GetLatestUpdateTimes();
-            if (DataView.ListDataModels is null || DataView.ListDataModels.Count == 0)
+            if (DataView.ListDataModels is null)
             {
-                MessageBox.Show("По выполненому запросу данные не найдены", "No Data Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+            else if(DataView.ListDataModels.Count == 0)
+            {
+                MessageBox.Show("По выполненому запросу данные не найдены", "No Data Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                dgBoards.DataSource = null;
+                return;
+            }
+            
             addRowsButton.Visible = false;
             foreach (DataGridViewTextBoxColumn column in dgBoards.Columns)
             {
@@ -46,9 +51,14 @@ namespace TestApplication
             if (double.TryParse(hoursComboBox.Text, out double hours) && double.TryParse(minutesComboBox.Text, out double minutes))
             {
                 DataView.GetBoardNotUpdatedMoreTime(hours, minutes);
-                if (DataView.ListDataModels is null || DataView.ListDataModels.Count == 0)
+                if (DataView.ListDataModels is null)
+                {
+                    return;
+                }
+                else if (DataView.ListDataModels.Count == 0)
                 {
                     MessageBox.Show("По выполненому запросу данные не найдены", "No Data Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    dgBoards.DataSource = null;
                     return;
                 }
                 addRowsButton.Visible = false;
@@ -88,9 +98,15 @@ namespace TestApplication
             {
                 return;
             }
-            if (DataView.ListDataModels is null || DataView.ListDataModels.Count == 0)
+            if (DataView.ListDataModels is null)
+            {
+                return;
+            }
+            else if (DataView.ListDataModels.Count == 0)
             {
                 MessageBox.Show("По выполненому запросу данные не найдены", "No Data Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                dgBoards.DataSource = null;
+                addRowsButton.Visible = false;
                 return;
             }
             foreach (DataGridViewTextBoxColumn column in dgBoards.Columns)
@@ -106,7 +122,6 @@ namespace TestApplication
             }
             addRowsButton.Visible = true;
             dgBoards.DataSource = new SortableBindingList<DataModel>(DataView.ListDataModels);
-
         }
 
         private async void AddRowsButton_Click(object sender, EventArgs e)

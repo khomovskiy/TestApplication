@@ -54,12 +54,10 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.5F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.5F));
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 93.2F));
             this.tableLayoutPanel1.Controls.Add(this.dgBoards, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.addRowsButton, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -87,7 +85,7 @@
             this.dgBoards.Name = "dgBoards";
             this.dgBoards.ReadOnly = true;
             this.dgBoards.RowHeadersVisible = false;
-            this.dgBoards.Size = new System.Drawing.Size(829, 409);
+            this.dgBoards.Size = new System.Drawing.Size(994, 409);
             this.dgBoards.TabIndex = 0;
             // 
             // boardNameDataGridViewTextBoxColumn
@@ -150,9 +148,10 @@
             this.flowLayoutPanel1.Controls.Add(this.minutesComboBox);
             this.flowLayoutPanel1.Controls.Add(this.label2);
             this.flowLayoutPanel1.Controls.Add(this.BigDelayButton);
+            this.flowLayoutPanel1.Controls.Add(this.addRowsButton);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(829, 29);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(994, 29);
             this.flowLayoutPanel1.TabIndex = 3;
             // 
             // showAllBoardsButton
@@ -314,9 +313,9 @@
             // 
             // addRowsButton
             // 
-            this.addRowsButton.Location = new System.Drawing.Point(838, 3);
+            this.addRowsButton.Location = new System.Drawing.Point(832, 3);
             this.addRowsButton.Name = "addRowsButton";
-            this.addRowsButton.Size = new System.Drawing.Size(150, 29);
+            this.addRowsButton.Size = new System.Drawing.Size(153, 23);
             this.addRowsButton.TabIndex = 4;
             this.addRowsButton.Text = "Показать ещё";
             this.addRowsButton.UseVisualStyleBackColor = true;

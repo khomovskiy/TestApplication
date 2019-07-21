@@ -20,15 +20,6 @@ namespace TestApplication
         public DataManager()
         {
             Connector = new DBMySQLConnector();
-            try
-            {
-                Connector.OpenConnection();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Ошибка подключения к базе данных", "Connection error",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                Environment.Exit(0);
-            }
         }
         //Получает дату последнего обновления координат каждого борта
         public void GetLatestUpdateTimes()
@@ -117,8 +108,9 @@ namespace TestApplication
             }
             else
             {
-                ListDataModels = new List<DataModel>();
                 ListImeies = ReadImeies();
+                if (ListImeies is null) return;
+                ListDataModels = new List<DataModel>();
                 Begin = begin;
                 End = end;
                 Delay = delaySize;
@@ -135,8 +127,10 @@ namespace TestApplication
                 else return;
             }
             buffer = GetRows(nextParameters);
+            int oldCount = ListDataModels.Count;
             for (int i = 0; i < buffer.Count; i++)
             {
+                
                 if (i + 1 < buffer.Count && (buffer[i].StartDateTime - buffer[i + 1].StartDateTime).TotalHours > Delay.TotalHours)
                 {
                     DataModel data = new DataModel
@@ -150,6 +144,11 @@ namespace TestApplication
                     };
                     ListDataModels.Add(data);
                 }
+            }
+            if (ListDataModels.Count-oldCount == 0&&ListDataModels.Count>0)
+            {
+                MessageBox.Show("Отображены все имеющиеся данные по текущему запросу","",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                return;
             }
         }
         int GetFirstRowId(MySqlParameter[] parameters)
@@ -166,6 +165,7 @@ namespace TestApplication
                 firstRowId = -1;
             }
             if (reader != null) reader.Close();
+            Connector.CloseConnection();
             return firstRowId;
         }
         List<DataModel> GetRows(MySqlParameter[] parameters)
@@ -187,6 +187,7 @@ namespace TestApplication
                 }
             }
             if (reader != null && !reader.IsClosed) reader.Close();
+            Connector.CloseConnection();
             return buff;
         }
     }
