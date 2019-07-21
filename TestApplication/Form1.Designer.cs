@@ -196,8 +196,9 @@
             "11",
             "12"});
             this.hoursComboBox.Location = new System.Drawing.Point(369, 3);
+            this.hoursComboBox.MaxLength = 2;
             this.hoursComboBox.Name = "hoursComboBox";
-            this.hoursComboBox.Size = new System.Drawing.Size(48, 21);
+            this.hoursComboBox.Size = new System.Drawing.Size(64, 21);
             this.hoursComboBox.TabIndex = 3;
             this.hoursComboBox.Text = "0";
             // 
@@ -207,7 +208,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(423, 0);
+            this.label1.Location = new System.Drawing.Point(439, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(27, 29);
             this.label1.TabIndex = 5;
@@ -281,7 +282,8 @@
             "57",
             "58",
             "59"});
-            this.minutesComboBox.Location = new System.Drawing.Point(456, 3);
+            this.minutesComboBox.Location = new System.Drawing.Point(472, 3);
+            this.minutesComboBox.MaxLength = 2;
             this.minutesComboBox.Name = "minutesComboBox";
             this.minutesComboBox.Size = new System.Drawing.Size(54, 21);
             this.minutesComboBox.TabIndex = 4;
@@ -293,7 +295,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(516, 0);
+            this.label2.Location = new System.Drawing.Point(532, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(30, 29);
             this.label2.TabIndex = 6;
@@ -302,7 +304,7 @@
             // 
             // BigDelayButton
             // 
-            this.BigDelayButton.Location = new System.Drawing.Point(552, 3);
+            this.BigDelayButton.Location = new System.Drawing.Point(568, 3);
             this.BigDelayButton.Name = "BigDelayButton";
             this.BigDelayButton.Size = new System.Drawing.Size(258, 23);
             this.BigDelayButton.TabIndex = 7;

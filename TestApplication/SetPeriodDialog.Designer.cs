@@ -44,6 +44,8 @@
             // 
             // fromDateTimePicker
             // 
+            this.fromDateTimePicker.CustomFormat = "dd.MM.yyyy HH:mm:ss";
+            this.fromDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.fromDateTimePicker.Location = new System.Drawing.Point(12, 53);
             this.fromDateTimePicker.Name = "fromDateTimePicker";
             this.fromDateTimePicker.Size = new System.Drawing.Size(201, 20);
@@ -69,6 +71,8 @@
             // 
             // toDateTimePicker
             // 
+            this.toDateTimePicker.CustomFormat = "dd.MM.yyyy HH:mm:ss";
+            this.toDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.toDateTimePicker.Location = new System.Drawing.Point(219, 53);
             this.toDateTimePicker.Name = "toDateTimePicker";
             this.toDateTimePicker.Size = new System.Drawing.Size(200, 20);
@@ -133,6 +137,7 @@
             "11",
             "12"});
             this.hoursComboBox.Location = new System.Drawing.Point(165, 77);
+            this.hoursComboBox.MaxLength = 2;
             this.hoursComboBox.Name = "hoursComboBox";
             this.hoursComboBox.Size = new System.Drawing.Size(48, 21);
             this.hoursComboBox.TabIndex = 8;
@@ -219,6 +224,7 @@
             "58",
             "59"});
             this.minutesComboBox.Location = new System.Drawing.Point(252, 77);
+            this.minutesComboBox.MaxLength = 2;
             this.minutesComboBox.Name = "minutesComboBox";
             this.minutesComboBox.Size = new System.Drawing.Size(54, 21);
             this.minutesComboBox.TabIndex = 9;

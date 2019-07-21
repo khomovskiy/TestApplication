@@ -87,8 +87,8 @@ namespace TestApplication
             if (ListDataModels is null) return;
             for (int i = 0; i < ListDataModels.Count; i++)
             {
-                double span = (DateTime.Now - ListDataModels[i].LastUpdateDateTime).TotalMinutes;
-                double span2 = (TimeSpan.FromHours(hours) + TimeSpan.FromMinutes(minutes)).TotalMinutes;
+                double span = (DateTime.Now - ListDataModels[i].LastUpdateDateTime).TotalHours;
+                double span2 = (TimeSpan.FromHours(hours) + TimeSpan.FromMinutes(minutes)).TotalHours;
                 if (span <= span2)
                 {
                     ListDataModels.Remove(ListDataModels[i]);
@@ -129,7 +129,7 @@ namespace TestApplication
             buffer = GetRows(nextParameters);
             for (int i = 0; i < buffer.Count; i++)
             {
-                if (i + 1 < buffer.Count && (buffer[i].StartDateTime - buffer[i + 1].StartDateTime).TotalMinutes > Delay.TotalMinutes)
+                if (i + 1 < buffer.Count && (buffer[i].StartDateTime - buffer[i + 1].StartDateTime).TotalHours > Delay.TotalHours)
                 {
                     DataModel data = new DataModel
                     {
@@ -155,7 +155,6 @@ namespace TestApplication
             }
             else
             {
-                MessageBox.Show("Данные не найдены", "ReadError", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 firstRowId = -1;
             }
             if (reader != null) reader.Close();

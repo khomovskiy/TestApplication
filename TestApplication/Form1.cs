@@ -19,10 +19,11 @@ namespace TestApplication
         //Вывести все борта с последним временем обновления координат
         private void ShowAllBoardsButton_Click(object sender, EventArgs e)
         {
-            
+
             DataView.GetLatestUpdateTimes();
             if (DataView.ListDataModels is null || DataView.ListDataModels.Count == 0)
             {
+                MessageBox.Show("По выполненому запросу данные не найдены", "No Data Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             addRowsButton.Visible = false;
@@ -37,7 +38,7 @@ namespace TestApplication
                     column.Visible = true;
                 }
             }
-            dgBoards.DataSource = new SortableBindingList<DataModel> (DataView.ListDataModels);
+            dgBoards.DataSource = new SortableBindingList<DataModel>(DataView.ListDataModels);
         }
         //Вывести все борта, которые не обновлялись более `hours`:`minutes` 
         private void NotUpdatedMoreTimeButton_Click(object sender, EventArgs e)
@@ -47,6 +48,7 @@ namespace TestApplication
                 DataView.GetBoardNotUpdatedMoreTime(hours, minutes);
                 if (DataView.ListDataModels is null || DataView.ListDataModels.Count == 0)
                 {
+                    MessageBox.Show("По выполненому запросу данные не найдены", "No Data Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
                 addRowsButton.Visible = false;
@@ -86,8 +88,9 @@ namespace TestApplication
             {
                 return;
             }
-            if(DataView.ListDataModels is null || DataView.ListDataModels.Count == 0)
+            if (DataView.ListDataModels is null || DataView.ListDataModels.Count == 0)
             {
+                MessageBox.Show("По выполненому запросу данные не найдены", "No Data Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             foreach (DataGridViewTextBoxColumn column in dgBoards.Columns)

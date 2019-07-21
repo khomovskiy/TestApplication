@@ -24,9 +24,12 @@ namespace TestApplication
         {
             From = fromDateTimePicker.Value;
             To = toDateTimePicker.Value;
-            double hours;
-            double minutes;
-            if (double.TryParse(hoursComboBox.Text, out hours) && double.TryParse(minutesComboBox.Text, out minutes))
+            if (From >= To)
+            {
+                MessageBox.Show("Введён некорректный промежуток времени", "Date Time Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (double.TryParse(hoursComboBox.Text, out double hours) && double.TryParse(minutesComboBox.Text, out double minutes))
             {
                 During = TimeSpan.FromHours(hours) + TimeSpan.FromMinutes(minutes);
             }
