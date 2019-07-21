@@ -12,35 +12,45 @@ namespace TestApplication
     class DBMySQLConnector
     {
         string ConnectionString { get; set; }
+        DbConnectionStringBuilder Builder { get; set; }
         public MySqlConnection Connection { get; set; }
         public string Server { get; set; }
         public string DataBase { get; set; }
         public string User { get; set; }
         public string Password { get; set; }
         public int Port { get; set; }
-
-        public DBMySQLConnector(string server = null, string dataBase = null, string user = null, string password = null, int port = 3306)
+        //Инициализация строки подключения из config файла
+        public DBMySQLConnector()
         {
+            Builder = new DbConnectionStringBuilder();
             try
             {
-                //var factory = DbProviderFactories.GetFactory("MySql.Data");
-                //var builder = factory.CreateConnectionStringBuilder();
-                ConnectionString = ConfigurationManager.ConnectionStrings["defaultConnection"].ConnectionString;
-                //Server = server is null ? builder["Server"] as string : server;
-                //DataBase = dataBase is null ? builder["Database"] as string : dataBase;
-                //if (int.TryParse(builder["Port"] as string, out int csPort))
-                //    Port = csPort;
-                //else
-                //    Port = port;
-                //User = user is null ? builder["Uid"] as string : user;
-                //Password = password is null ? builder["Password"] as string : password;
-                //StringBuilder str = new StringBuilder();
-                //DbConnectionStringBuilder.AppendKeyValuePair(str, "Server", Server);
-                //DbConnectionStringBuilder.AppendKeyValuePair(str, "Port", Port.ToString());
-                //DbConnectionStringBuilder.AppendKeyValuePair(str, "Database", DataBase);
-                //DbConnectionStringBuilder.AppendKeyValuePair(str, "Uid", User);
-                //DbConnectionStringBuilder.AppendKeyValuePair(str, "Password", Password);
-                //ConnectionString = str.ToString();
+                Builder.ConnectionString = ConfigurationManager.ConnectionStrings["defaultConnection"].ConnectionString;
+                InitializeFields();
+                ConnectionString = Builder.ConnectionString;
+            }
+            catch (ArgumentException)
+            {
+                MessageBox.Show("Ошибка конфигурации подключения", "ConfigurationError", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            Connection = new MySqlConnection(ConnectionString);
+        }
+        //Инициализация строки подключения из кода
+        public DBMySQLConnector(string server, string dataBase, string user, string password = null, int port = 3306)
+        {
+            Builder = new DbConnectionStringBuilder();
+            try
+            {
+                StringBuilder str = new StringBuilder();
+                DbConnectionStringBuilder.AppendKeyValuePair(str, "Server", server);
+                DbConnectionStringBuilder.AppendKeyValuePair(str, "Port", port.ToString());
+                DbConnectionStringBuilder.AppendKeyValuePair(str, "Database", dataBase);
+                DbConnectionStringBuilder.AppendKeyValuePair(str, "Uid", user);
+                DbConnectionStringBuilder.AppendKeyValuePair(str, "Pwd", password);
+                Builder.ConnectionString = str.ToString();
+                InitializeFields();
+                ConnectionString = Builder.ConnectionString;
             }
             catch (Exception)
             {
@@ -49,6 +59,25 @@ namespace TestApplication
             }
             Connection = new MySqlConnection(ConnectionString);
 
+        }
+        void InitializeFields()
+        {
+            Server = Builder["Server"] as string;
+            DataBase = Builder["Database"] as string;
+            try
+            {
+                Password = Builder["Pwd"] as string;
+            }
+            catch (ArgumentException)
+            {
+                Password = "";
+                Builder.Add("pwd", Password);
+            }
+            if (int.TryParse(Builder["Port"] as string, out int csPort))
+                Port = csPort;
+            else
+                Port = 3306;
+            User = Builder["Uid"] as string;
         }
         //Закрывает соединение с БД
         public void CloseConnection()

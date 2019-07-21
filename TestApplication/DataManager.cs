@@ -20,7 +20,15 @@ namespace TestApplication
         public DataManager()
         {
             Connector = new DBMySQLConnector();
-            if (Connector.Connection is null) Environment.Exit(0);
+            try
+            {
+                Connector.OpenConnection();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Ошибка подключения к базе данных", "Connection error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                Environment.Exit(0);
+            }
         }
         //Получает дату последнего обновления координат каждого борта
         public void GetLatestUpdateTimes()
